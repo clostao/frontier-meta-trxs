@@ -59,7 +59,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
 				],
 				// Initial PoA authorities
 				vec![authority_keys_from_seed("Alice")],
-				42,
+				42123,
 			)
 		},
 		// Bootnodes
@@ -110,7 +110,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 					authority_keys_from_seed("Alice"),
 					authority_keys_from_seed("Bob"),
 				],
-				42,
+				42123,
 			)
 		},
 		// Bootnodes
@@ -196,7 +196,7 @@ fn testnet_genesis(
 				);
 				map.insert(
 					// H160 address of CI test runner account
-					H160::from_str("6be02d1d3665660d22ff9624b7be0551ee1ac91b")
+					H160::from_str("a58482131a8d67725e996af72D91A849AcC0F4A1")
 						.expect("internal H160 is valid; qed"),
 					fp_evm::GenesisAccount {
 						balance: U256::from_str("0xffffffffffffffffffffffffffffffff")
