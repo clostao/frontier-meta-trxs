@@ -74,6 +74,7 @@ where
 			>,
 		) -> (ExitReason, R),
 	{
+		frame_support::log::info!("execute:");
 		let (base_fee, weight) = T::FeeCalculator::min_gas_price();
 
 		#[cfg(feature = "forbid-evm-reentrancy")]
@@ -130,6 +131,7 @@ where
 			>,
 		) -> (ExitReason, R),
 	{
+		frame_support::log::info!("execute_inner:");
 		// EIP-3607: https://eips.ethereum.org/EIPS/eip-3607
 		// Do not allow transactions for which `tx.sender` has any code deployed.
 		//
@@ -143,6 +145,8 @@ where
 				weight,
 			});
 		}
+
+		frame_support::log::info!("no check pre compiled");
 
 		let (total_fee_per_gas, _actual_priority_fee_per_gas) =
 			match (max_fee_per_gas, max_priority_fee_per_gas, is_transactional) {
@@ -167,12 +171,15 @@ where
 				(None, _, false) => (Default::default(), U256::zero()),
 				// Unreachable, previously validated. Handle gracefully.
 				_ => {
+					frame_support::log::info!("err: gas price too low");
 					return Err(RunnerError {
 						error: Error::<T>::GasPriceTooLow,
 						weight,
-					})
+					});
 				}
 			};
+
+		frame_support::log::info!("gas price calculation");
 
 		// After eip-1559 we make sure the account can pay both the evm execution and priority fees.
 		let total_fee =
@@ -183,9 +190,13 @@ where
 					weight,
 				})?;
 
+		frame_support::log::info!("total fees calculation");
+
 		// Deduct fee from the `source` account. Returns `None` if `total_fee` is Zero.
 		let fee = T::OnChargeTransaction::withdraw_fee(&source, total_fee)
 			.map_err(|e| RunnerError { error: e, weight })?;
+
+		frame_support::log::info!("withdrawn fees calculation");
 
 		// Execute the EVM call.
 		let vicinity = Vicinity {
@@ -197,7 +208,11 @@ where
 		let state = SubstrateStackState::new(&vicinity, metadata);
 		let mut executor = StackExecutor::new_with_precompiles(state, config, precompiles);
 
+		frame_support::log::info!("executor construction");
+
 		let (reason, retv) = f(&mut executor);
+
+		frame_support::log::info!("exit reason: {:?}", reason);
 
 		// Post execution.
 		let used_gas = U256::from(executor.used_gas());
@@ -363,6 +378,7 @@ where
 				config,
 			)?;
 		}
+		frame_support::log::info!("call");
 		let precompiles = T::PrecompilesValue::get();
 		Self::execute(
 			source,

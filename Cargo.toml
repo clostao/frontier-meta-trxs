@@ -8,6 +8,7 @@ members = [
 	"frame/hotfix-sufficients",
 	"frame/evm/precompile/sha3fips",
 	"frame/evm/precompile/simple",
+	"frame/onbehalf-executor",
 	"frame/evm/precompile/modexp",
 	"frame/evm/precompile/ed25519",
 	"frame/evm/precompile/bn128",
@@ -89,6 +90,7 @@ sp-storage = { version = "7.0.0", git = "https://github.com/paritytech/substrate
 sp-timestamp = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
 sp-transaction-pool = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
 sp-version = { version = "5.0.0", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
+sp-arithmetic = { version = "6.0.0", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
 # Substrate FRAME
 frame-benchmarking = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
 frame-executive = { version = "4.0.0-dev", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
@@ -138,5 +140,6 @@ pallet-evm-precompile-sha3fips = { version = "2.0.0-dev", path = "frame/evm/prec
 pallet-evm-precompile-simple = { version = "2.0.0-dev", path = "frame/evm/precompile/simple", default-features = false }
 pallet-evm-test-vector-support = { version = "1.0.0-dev", path = "frame/evm/test-vector-support" }
 pallet-hotfix-sufficients = { version = "1.0.0", path = "frame/hotfix-sufficients", default-features = false }
+pallet-onbehalf-executor = { version = "1.0.0", path = "frame/onbehalf-executor", default-features = false }
 # Frontier Template
 frontier-template-runtime = { path = "template/runtime", default-features = false }

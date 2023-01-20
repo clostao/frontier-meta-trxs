@@ -2212,6 +2212,7 @@ dependencies = [
  "pallet-evm-precompile-simple",
  "pallet-grandpa",
  "pallet-hotfix-sufficients",
+ "pallet-onbehalf-executor",
  "pallet-sudo",
  "pallet-timestamp",
  "pallet-transaction-payment",
@@ -4429,6 +4430,22 @@ dependencies = [
  "sp-io",
  "sp-runtime",
  "sp-std",
+]
+
+[[package]]
+name = "pallet-onbehalf-executor"
+version = "1.0.0"
+dependencies = [
+ "ethereum",
+ "fp-ethereum",
+ "frame-support",
+ "frame-system",
+ "pallet-ethereum",
+ "pallet-evm",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-arithmetic",
+ "sp-core",
 ]
 
 [[package]]

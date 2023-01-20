@@ -200,6 +200,8 @@ pub mod pallet {
 		) -> DispatchResultWithPostInfo {
 			T::CallOrigin::ensure_address_origin(&source, origin)?;
 
+			let prev_total_issuance = <T::Currency as Currency<_>>::total_issuance();
+
 			let is_transactional = true;
 			let validate = true;
 			let info = match T::Runner::call(
@@ -236,6 +238,8 @@ pub mod pallet {
 					Pallet::<T>::deposit_event(Event::<T>::ExecutedFailed { address: target });
 				}
 			};
+
+			assert_eq!(prev_total_issuance, <T::Currency as Currency<_>>::total_issuance());
 
 			Ok(PostDispatchInfo {
 				actual_weight: Some(T::GasWeightMapping::gas_to_weight(
