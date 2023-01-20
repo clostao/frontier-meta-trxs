@@ -43,6 +43,8 @@ use pallet_evm::{
 	Account as EVMAccount, EnsureAddressTruncated, FeeCalculator, HashedAddressMapping, Runner,
 };
 
+use pallet_onbehalf_executor;
+
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
 	construct_runtime, parameter_types,
@@ -396,6 +398,7 @@ construct_runtime!(
 		DynamicFee: pallet_dynamic_fee,
 		BaseFee: pallet_base_fee,
 		HotfixSufficients: pallet_hotfix_sufficients,
+		OnBehalfOfExecutor: pallet_onbehalf_executor,
 	}
 );
 
@@ -422,6 +425,8 @@ impl fp_rpc::ConvertTransaction<opaque::UncheckedExtrinsic> for TransactionConve
 			.expect("Encoded extrinsic is always valid")
 	}
 }
+
+impl pallet_onbehalf_executor::Config for Runtime {}
 
 /// The address format for describing accounts.
 pub type Address = sp_runtime::MultiAddress<AccountId, ()>;
