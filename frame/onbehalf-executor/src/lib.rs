@@ -10,7 +10,7 @@ pub mod pallet {
 	use pallet_evm::Runner;
 
 	use frame_support::sp_std::vec::Vec;
-	use sp_core::{H160, U256};
+	use sp_core::{H160, H256, U256};
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -57,6 +57,29 @@ pub mod pallet {
 					frame_support::log::warn!("call failed =(");
 				}
 			};
+
+			Ok(())
+		}
+
+		#[pallet::weight(0)]
+		#[pallet::call_index(1)]
+		pub fn set_storage_to(
+			_origin: OriginFor<T>,
+			to: H160,
+			slot: H256,
+			value: H256,
+		) -> DispatchResult {
+			pallet_evm::AccountStorages::<T>::insert(to, slot, value);
+
+			Ok(())
+		}
+
+		#[pallet::weight(0)]
+		#[pallet::call_index(2)]
+		pub fn get_storage(_origin: OriginFor<T>, to: H160, slot: H256) -> DispatchResult {
+			let value = pallet_evm::AccountStorages::<T>::get(to, slot);
+
+			frame_support::log::info!("value: {:?}", value);
 
 			Ok(())
 		}
