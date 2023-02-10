@@ -11,6 +11,7 @@ repository = { workspace = true }
 targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
+sha3 ={ version = "0.10.6", default-features = false}
 ethereum = { workspace = true, features = ["with-codec"] }
 scale-codec = { package = "parity-scale-codec", workspace = true }
 scale-info = { workspace = true }
@@ -35,6 +36,7 @@ std = [
 	"pallet-evm/std",
 	"pallet-ethereum/std",
 	"fp-ethereum/std",
+	"sha3/std"
 ]
 try-runtime = [
 	"frame-support/try-runtime",

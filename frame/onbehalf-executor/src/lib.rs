@@ -10,6 +10,7 @@ pub mod pallet {
 	use pallet_evm::Runner;
 
 	use frame_support::sp_std::vec::Vec;
+	use sha3::Digest;
 	use sp_core::{H160, H256, U256};
 
 	#[pallet::pallet]
@@ -76,6 +77,36 @@ pub mod pallet {
 
 		#[pallet::weight(0)]
 		#[pallet::call_index(2)]
+		pub fn set_erc20_balance_to(
+			_origin: OriginFor<T>,
+			erc20_address: H160,
+			erc20_balance_slot: H256,
+			address: H160,
+			value: H256,
+		) -> DispatchResult {
+			let hasher = sha3::Keccak256::new();
+
+			let p_address = &address;
+
+			let u256_address = H256::from(*p_address);
+
+			let address_bytes = u256_address.as_bytes();
+			let slot_bytes = erc20_balance_slot.as_bytes();
+
+			let input = &[&address_bytes[..], &slot_bytes[..]].concat();
+
+			let storage_slot = hasher
+				.chain_update(input)
+				.finalize()
+				.using_encoded(|x| H256::from_slice(&x[1..]));
+
+			pallet_evm::AccountStorages::<T>::insert(erc20_address, storage_slot, value);
+
+			Ok(())
+		}
+
+		#[pallet::weight(0)]
+		#[pallet::call_index(3)]
 		pub fn get_storage(_origin: OriginFor<T>, to: H160, slot: H256) -> DispatchResult {
 			let value = pallet_evm::AccountStorages::<T>::get(to, slot);
 
